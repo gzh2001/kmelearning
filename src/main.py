@@ -120,7 +120,7 @@ def get_video_list(driver):
     try:
         videoList = driver.find_elements(By.CLASS_NAME, 'course-chapters-section')
         for v in videoList:
-            if v.find_element(By.CLASS_NAME, 'course-chapters-section-name').text == '测试题':
+            if '测试题' in v.find_element(By.CLASS_NAME, 'course-chapters-section-name').text:
                 videoList.remove(v)
                 logger.info(f'存在测试题')
         if not videoList:
