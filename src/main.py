@@ -53,71 +53,64 @@ def get_chrome_version():
 
 
 def get_driver_path():
-    """智能查找 ChromeDriver"""
-    # 1. 检查当前目录（开发环境）
-    current_dir = Path(__file__).parent
-    driver_in_current = current_dir / 'chromedriver.exe'
-
-    # 2. 检查 exe 所在目录（打包环境）
+    """获取 ChromeDriver 路径（兼容开发和打包环境）"""
+    # 判断是否为打包后的环境
     if getattr(sys, 'frozen', False):
-        exe_dir = Path(sys.executable).parent
-        driver_in_exe = exe_dir / 'chromedriver.exe'
+        # 打包后：exe 所在目录
+        base_path = os.path.dirname(sys.executable)
     else:
-        driver_in_exe = None
+        # 开发环境：脚本所在目录
+        base_path = os.path.dirname(os.path.abspath(__file__))
 
-    # 3. 检查系统 PATH
-    import shutil
-    driver_in_path = shutil.which('chromedriver.exe')
+    driver_path = os.path.join(base_path, 'chromedriver.exe')
 
-    # 优先级：exe目录 > 当前目录 > PATH
-    for path in [driver_in_exe, driver_in_current, driver_in_path]:
-        if path and Path(path).exists():
-            logger.info(f"找到 ChromeDriver: {path}")
-            return str(path)
-
-    logger.warning("未找到本地 ChromeDriver，将自动下载")
-    return None
+    if os.path.exists(driver_path):
+        logger.info(f"✓ 找到本地 ChromeDriver: {driver_path}")
+        return driver_path
+    else:
+        logger.warning(f"✗ 未找到本地 ChromeDriver: {driver_path}")
+        logger.info("将尝试自动下载...")
+        return None
 
 
 def init_driver(options=None):
-    """智能初始化驱动"""
+    """初始化 undetected_chromedriver"""
     try:
         if options is None:
             options = uc.ChromeOptions()
 
+        # 反检测配置
         options.add_argument('--disable-blink-features=AutomationControlled')
-
-        # 获取 Chrome 版本
-        chrome_version = get_chrome_version()
 
         # 获取驱动路径
         driver_path = get_driver_path()
 
         # 创建驱动
         if driver_path:
-            logger.info("使用本地 ChromeDriver")
+            # 使用本地驱动
             driver = uc.Chrome(
                 options=options,
                 driver_executable_path=driver_path,
                 use_subprocess=False
             )
+            logger.info("✓ 使用本地 ChromeDriver")
         else:
-            logger.info("自动下载 ChromeDriver")
+            # 自动下载驱动（首次运行会较慢）
             driver = uc.Chrome(
                 options=options,
-                version_main=chrome_version,  # 指定版本
+                version_main=None,  # 自动检测版本
                 use_subprocess=False
             )
+            logger.info("✓ 自动下载 ChromeDriver")
 
-        logger.info("驱动初始化成功")
         return driver
 
     except Exception as e:
-        logger.error(f"初始化驱动失败: {e}")
-        logger.info("请尝试以下操作：")
-        logger.info("1. 检查 Chrome 浏览器是否为最新版本")
-        logger.info("2. 手动下载匹配版本的 chromedriver.exe")
-        logger.info("3. 将 chromedriver.exe 放在程序同目录下")
+        logger.error(f"✗ 初始化驱动失败: {e}")
+        logger.error("请检查：")
+        logger.error("1. Chrome 浏览器是否已安装")
+        logger.error("2. chromedriver.exe 是否在程序同目录下")
+        logger.error("3. chromedriver.exe 版本是否与 Chrome 匹配")
         raise
 
 def manul_login(driver):
@@ -135,10 +128,11 @@ def manul_login(driver):
             # 等待个人中心元素出现
             dashboard = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable(
-                    (By.XPATH, '//*[@id="homeIndex"]/div/div[2]/div/div/div/div/div/div[8]/div/div/div/div/div[2]'))
+                    (By.XPATH, '//*[@id="homeIndex"]/div/div[2]/div/div/div/div/div/div[7]/div/div/div/div'))
             )
 
             if dashboard and dashboard.text == '个人中心':
+                dashboard.click()
                 logger.info("登录成功！")
                 return True
             else:
@@ -157,13 +151,17 @@ def manul_login(driver):
 
 def to_my_task(driver):
     try:
-        dashborad = driver.find_element(By.XPATH,
-                                        '//*[@id="homeIndex"]/div/div[2]/div/div/div/div/div/div[8]/div/div/div/div/div[2]')
-        dashborad.click()
-        logger.info('打开个人中心')
-        sleep(5)
-        myTaskPage = driver.find_element(By.XPATH,
-                                         '//*[@id="root"]/div[3]/div/div[2]/div[2]/div[1]/div[2]/div/div[3]/div[2]')
+        # dashborad = driver.find_element(By.XPATH,
+        #                                 '//*[@id="homeIndex"]/div/div[2]/div/div/div/div/div/div[7]/div/div/div/div')
+        # dashborad.click()
+        # logger.info('打开个人中心')
+        # sleep(5)
+        # myTaskPage = driver.find_element(By.XPATH,
+        #                                  '//*[@id="root"]/div[3]/div/div[2]/div[2]/div[1]/div[2]/div/div[3]/div[2]')
+        myTaskPage = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, '//*[@id="root"]/div[3]/div/div[2]/div[2]/div[1]/div[2]/div/div[3]/div[2]'))
+        )
         myTaskPage.click()
         logger.info('打开我的任务页面')
         sleep(5)
