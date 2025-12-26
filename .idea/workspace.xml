@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="40bc2f12-4a22-4f39-ba88-ec183b8a5e29" name="更改" comment=".idea">
+    <list default="true" id="40bc2f12-4a22-4f39-ba88-ec183b8a5e29" name="更改" comment="修复问题">
+      <change afterPath="$PROJECT_DIR$/build.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
@@ -140,7 +141,7 @@
       <workItem from="1766131033795" duration="5433000" />
       <workItem from="1766539449522" duration="948000" />
       <workItem from="1766651633570" duration="21000" />
-      <workItem from="1766738885775" duration="1718000" />
+      <workItem from="1766738885775" duration="2342000" />
     </task>
     <task id="LOCAL-00001" summary="Add .gitignore">
       <option name="closed" value="true" />
@@ -206,7 +207,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766738981208</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="修复问题">
+      <option name="closed" value="true" />
+      <created>1766740688242</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1766740688242</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -230,24 +239,25 @@
     <MESSAGE value="v2.1" />
     <MESSAGE value="v2.2 过阿里云认证" />
     <MESSAGE value=".idea" />
-    <option name="LAST_COMMIT_MESSAGE" value=".idea" />
+    <MESSAGE value="修复问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复问题" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/main.py</url>
-          <line>273</line>
+          <line>265</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/main.py</url>
-          <line>128</line>
+          <line>120</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/main.py</url>
-          <line>173</line>
+          <line>165</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>

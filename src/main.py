@@ -1,5 +1,6 @@
 import os
 import sys
+import multiprocessing
 from math import floor
 from pathlib import Path
 from time import sleep
@@ -27,15 +28,6 @@ logger.addHandler(handler)
 VIDEO_SPEED = 1.0  # 视频播放速度
 
 
-def resource_path(relative_path):
-    """ 获取资源的绝对路径，无论是开发环境还是打包环境 """
-    try:
-        # PyInstaller 创建一个临时文件夹，并把路径存储在 _MEIPASS 中
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
 
 
 def get_chrome_version():
@@ -356,4 +348,5 @@ def main():
 
 
 if __name__ == '__main__':
+    multiprocessing.freeze_support()
     main()
